@@ -23,12 +23,12 @@ func controller(w http.ResponseWriter, r *http.Request) {
 	_ = json.NewDecoder(r.Body).Decode(&body)
 	command, _ := json.Marshal(body)
 	fmt.Println(string(command))
-	db, err := sql.Open("mysql", base_info["url"])
+	db, err := sql.Open("mysql", baseInfo["url"])
 	if err != nil {
-		Print_error("db error: ", err)
+		printError("db error: ", err)
 	}
 	defer db.Close()
-	output := service_map[api](command, db)
+	output := serviceMap[api](command, db)
 	w.Header().Set("Content-Type", "application/json")
 	fmt.Fprintf(w, output)
 }
@@ -38,12 +38,12 @@ func main() {
 	router := mux.NewRouter()
 	router.HandleFunc("/v1/{first}", controller)
 	http.Handle("/", router)
-	https_err := http.ListenAndServeTLS(":8443", base_info["cert"], base_info["key"], nil)
-	if https_err != nil {
-		Print_error("https error: ", https_err)
+	httpsErr := http.ListenAndServeTLS(":8443", baseInfo["cert"], baseInfo["key"], nil)
+	if httpsErr != nil {
+		printError("https error: ", httpsErr)
 	}
-	http_err := http.ListenAndServe(":8001", nil)
-	if http_err != nil {
-		Print_error("http error: ", http_err)
+	httpErr := http.ListenAndServe(":8001", nil)
+	if httpErr != nil {
+		printError("http error: ", httpErr)
 	}
 }

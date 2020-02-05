@@ -6,65 +6,65 @@ import(
 	"encoding/json"
 )
 
-func GetOutput(result_type int, results []map[string]interface{}) string {
+func getOutput(resultType int, results []map[string]interface{}) string {
 	var output = make(map[string]interface{}, 0)
-	output["result"] = result_type
+	output["result"] = resultType
 	output["message"] = results
-	output_string := GetJSONstring(output)
-	return output_string
+	outputString := getJSONstring(output)
+	return outputString
 }
 
-func ShowAllRanks(input []byte, db *sql.DB) string {
-	var name, replay_data, time string
+func showAllRanks(input []byte, db *sql.DB) string {
+	var name, replayData, time string
 	var score int
-	result_set, query_err := db.Query("SELECT name, score, replay_data, time FROM view_ranking")
-	if query_err != nil {
-		Print_error("query error", query_err)
+	resultSet, queryErr := db.Query("SELECT name, score, replay_data, time FROM view_ranking")
+	if queryErr != nil {
+		printError("query error", queryErr)
 	}
-	defer result_set.Close()
+	defer resultSet.Close()
 	results := make([]map[string]interface{}, 0)
-	result_type := -1
-	for result_set.Next() {
-		scan_err := result_set.Scan(&name, &score, &replay_data, &time)
-		if scan_err != nil {
-			Print_error("scan error", scan_err)
+	resultType := -1
+	for resultSet.Next() {
+		scanErr := resultSet.Scan(&name, &score, &replayData, &time)
+		if scanErr != nil {
+			printError("scan error", scanErr)
 		}
 		var result = map[string]interface{} {
 			"name": name,
 			"score": score,
-			"replay_data": replay_data,
+			"replay_data": replayData,
 			"time": time,
 		}
 		results = append(results, result)
 	}
 	if len(results) > 0 {
-		result_type = 2
+		resultType = 2
 	}
-	return GetOutput(result_type, results)
+	return getOutput(resultType, results)
 }
 
-func AddRank(input []byte, db *sql.DB) string {
+func addRank(input []byte, db *sql.DB) string {
 	type Command struct {
-		Id string
+		ID string
 		Score int
-		Replay_data string
+		ReplayData string
 	}
 	command := Command{}
-	if json_err := json.Unmarshal(input, &command); json_err != nil {
-		Print_error("json error @AddRank ", json_err)
+	if jsonErr := json.Unmarshal(input, &command); jsonErr != nil {
+		printError("json error @AddRank ", jsonErr)
 	}
 	results := make([]map[string]interface{}, 0)
 	results = append(results, map[string]interface{} { "insert": "fail"})
-	result_type := -1
-	result, query_err := db.Exec("INSERT INTO ranks(score,replay_data,users_id,time) VALUES (?,?,?,now())", command.Score, command.Replay_data, command.Id)
-	if query_err != nil {
-		Print_error("query error ", query_err)
+	resultType := -1
+	result, queryErr := db.Exec("INSERT INTO ranks(score,replay_data,users_id,time) VALUES (?,?,?,now())", command.Score, command.ReplayData, command.ID)
+	if queryErr != nil {
+		printError("query error ", queryErr)
 	}
 	n, _ := result.RowsAffected()
 	if n == 1 {
-		result_type = 1
+		resultType = 1
 		results[0]["insert"] = "success"
 	}
-	return GetOutput(result_type, results)
+	return getOutput(resultType, results)
 }
 

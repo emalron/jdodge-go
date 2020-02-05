@@ -8,10 +8,10 @@ import(
 	"encoding/json"
 )
 
-func GetPropertiesMap(filename string) map[string]string {
+func getPropertiesMap(filename string) map[string]string {
 	file1, err1 := os.Open(filename)
 	if err1 != nil {
-		Print_error("file open error: ", err1)
+		printError("file open error: ", err1)
 	}
 	defer file1.Close()
 	scanner := bufio.NewScanner(file1)
@@ -24,14 +24,14 @@ func GetPropertiesMap(filename string) map[string]string {
 	return output
 }
 
-func Print_error(message string, err error) {
+func printError(message string, err error) {
 	fmt.Fprintf(os.Stderr, message, err, "\n")
 }
 
-func GetJSONstring(mapObject map[string]interface{}) string {
+func getJSONstring(mapObject map[string]interface{}) string {
 	jsonBytes, err := json.Marshal(mapObject)
 	if err != nil {
-		Print_error("json error: ", err)
+		printError("json error: ", err)
 	}
 	retString := string(jsonBytes)
 	return retString
