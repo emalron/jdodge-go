@@ -3,7 +3,6 @@ package interfaces
 import(
     "net/http"
     "jdodge-go/domain"
-    "jdodge-go/usecases"
     "fmt"
     "io"
     "os"
@@ -11,10 +10,11 @@ import(
 
 type RankInteractor interface {
     ShowAllRanks()([]domain.Rank,error)
+    ShowByID(id string)([]domain.Rank,error)
 }
 
 type WebserviceHandler struct {
-    RankInteractor *usecases.RankInteractor
+    RankInteractor RankInteractor
 }
 
 func (handle WebserviceHandler) ShowAll(w http.ResponseWriter, r *http.Request) {
