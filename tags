@@ -1,0 +1,48 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+DBHandler	interfaces/repositories.go	/^type DBHandler interface {$/;"	t
+DBRankRepo	interfaces/repositories.go	/^type DBRankRepo DBRepo$/;"	t
+DBRepo	interfaces/repositories.go	/^type DBRepo struct {$/;"	t
+DBUserRepo	interfaces/repositories.go	/^type DBUserRepo DBRepo$/;"	t
+Execute	infrastructure/infrastructure.go	/^func (handler *MysqlHandler) Execute(statement string) {$/;"	f
+FindAll	interfaces/repositories.go	/^func (repo *DBRankRepo) FindAll() ([]domain.Rank, error) {$/;"	f
+FindByID	interfaces/repositories.go	/^func (repo *DBRankRepo) FindByID(id string) ([]domain.Rank, error) {$/;"	f
+FindByID	interfaces/repositories.go	/^func (repo *DBUserRepo) FindByID(id string) (usecases.User, error) {$/;"	f
+GetJSONstring	util/util.go	/^func GetJSONstring(mapObject map[string]interface{}) string {$/;"	f
+GetPropertiesMap	util/util.go	/^func GetPropertiesMap(filename string) map[string]string {$/;"	f
+Ignite	main.go	/^func Ignite() {$/;"	f
+MysqlHandler	infrastructure/infrastructure.go	/^type MysqlHandler struct {$/;"	t
+MysqlRow	infrastructure/infrastructure.go	/^type MysqlRow struct {$/;"	t
+NewDBRankRepo	interfaces/repositories.go	/^func NewDBRankRepo(dbHandlers map[string]DBHandler) *DBRankRepo {$/;"	f
+NewDBUserRepo	interfaces/repositories.go	/^func NewDBUserRepo(dbHandlers map[string]DBHandler) *DBUserRepo {$/;"	f
+NewMysqlHandler	infrastructure/infrastructure.go	/^func NewMysqlHandler(dbfilename string) *MysqlHandler {$/;"	f
+Next	infrastructure/infrastructure.go	/^func (row MysqlRow) Next() bool {$/;"	f
+PrintError	util/util.go	/^func PrintError(message string, err error) {$/;"	f
+Query	infrastructure/infrastructure.go	/^func (handler *MysqlHandler) Query(statement string) interfaces.Row {$/;"	f
+Rank	domain/rank.go	/^type Rank struct {$/;"	t
+RankInteractor	interfaces/webservice.go	/^type RankInteractor interface {$/;"	t
+RankInteractor	usecases/rankUsecases.go	/^type RankInteractor struct {$/;"	t
+RankRepository	domain/rank.go	/^type RankRepository interface {$/;"	t
+Row	interfaces/repositories.go	/^type Row interface {$/;"	t
+Scan	infrastructure/infrastructure.go	/^func (row MysqlRow) Scan(dest ...interface{}) error {$/;"	f
+ShowAll	interfaces/webservice.go	/^func (handle WebserviceHandler) ShowAll(w http.ResponseWriter, r *http.Request) {$/;"	f
+ShowAllRanks	usecases/rankUsecases.go	/^func (Interactor *RankInteractor) ShowAllRanks() ([]domain.Rank, error) {$/;"	f
+ShowByID	interfaces/webservice.go	/^func (handle WebserviceHandler) ShowByID(w http.ResponseWriter, r *http.Request) {$/;"	f
+ShowByID	usecases/rankUsecases.go	/^func (Interactor *RankInteractor) ShowByID(id string) ([]domain.Rank, error) {$/;"	f
+User	usecases/rankUsecases.go	/^type User struct {$/;"	t
+UserRepository	usecases/rankUsecases.go	/^type UserRepository interface {$/;"	t
+WebserviceHandler	interfaces/webservice.go	/^type WebserviceHandler struct {$/;"	t
+baseInfo	main.go	/^var baseInfo map[string]string$/;"	v
+domain	domain/rank.go	/^package domain$/;"	p
+headerMiddleWare	main.go	/^func headerMiddleWare(h http.Handler) http.Handler {$/;"	f
+infrastructure	infrastructure/infrastructure.go	/^package infrastructure$/;"	p
+interfaces	interfaces/repositories.go	/^package interfaces$/;"	p
+interfaces	interfaces/webservice.go	/^package interfaces$/;"	p
+main	main.go	/^func main() {$/;"	f
+main	main.go	/^package main$/;"	p
+usecases	usecases/rankUsecases.go	/^package usecases$/;"	p
+util	util/util.go	/^package util$/;"	p

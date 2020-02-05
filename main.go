@@ -1,26 +1,13 @@
 package main
 import(
-	G "jdodge-go/global"
-	"net/http"
-	"github.com/gorilla/mux"
-	"database/sql"
-	_ "github.com/go-sql-driver/mysql"
-	"fmt"
-	"encoding/json"
+    "jdodge-go/util"
+    "jdodge-go/usecases"
+    "jdodge-go/interfaces"
+    "jdodge-go/infrastructure"
+    "net/http"
+    "github.com/gorilla/mux"
+    "fmt"
 )
-
-func controller(w http.ResponseWriter, r *http.Request) {
-	param := mux.Vars(r)
-	api := param["first"]
-	var body map[string]interface{}
-	_ = json.NewDecoder(r.Body).Decode(&body)
-	command, _ := json.Marshal(body)
-
-
-	output := serviceMap[api](command, db)
-	w.Header().Set("Content-Type", "application/json")
-	fmt.Fprintf(w, output)
-}
 
 func headerMiddleWare(h http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -35,20 +22,35 @@ func headerMiddleWare(h http.Handler) http.Handler {
 	})
 }
 
-func init() {
-	G.Ignite()
+var baseInfo map[string]string
+func Ignite() {
+	baseInfo = util.GetPropertiesMap("properties")
 }
 
 func main() {
-	router := mux.NewRouter()
-	router.HandleFunc("/v1/{first}", controller)
+    Ignite()
+    dbHandler := infrastructure.NewMysqlHandler(baseInfo["url"])
+    handlers := make(map[string]interfaces.DBHandler, 0)
+    handlers["DBRankRepo"] = dbHandler
+    handlers["DBUserRepo"] = dbHandler
+    rankInteractor := new(usecases.RankInteractor)
+    rankInteractor.RankRepository = interfaces.NewDBRankRepo(handlers)
+    rankInteractor.UserRepository = interfaces.NewDBUserRepo(handlers)
+    webService := interfaces.WebserviceHandler{}
+    webService.RankInteractor = rankInteractor
+
+    router := mux.NewRouter()
+	router.HandleFunc("/v1/showAllRanks", func(w http.ResponseWriter, r *http.Request) {
+        fmt.Println("you hit the router")
+        webService.ShowAll(w, r)
+    })
 	http.Handle("/", headerMiddleWare(router))
 	httpsErr := http.ListenAndServeTLS(":8443", baseInfo["cert"], baseInfo["key"], nil)
-	if httpsErr != nil {
-		printError("https error: ", httpsErr)
-	}
+    if httpsErr != nil {
+        util.PrintError("https error: ", httpsErr)
+    }
 	httpErr := http.ListenAndServe(":8001", nil)
 	if httpErr != nil {
-		printError("http error: ", httpErr)
+		util.PrintError("http error: ", httpErr)
 	}
 }
